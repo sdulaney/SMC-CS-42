@@ -1,0 +1,187 @@
+CHAPTER 4: SEQUENTIAL CIRCUITS
+
+- 4-1 Sequential Circuit Definitions
+  - Most systems encountered in practice also include storage elements, requiring that the systems be described as sequential circuits
+  - The binary information stored in storage elements at any given time defines the *state* of the sequential circuit at that time
+  - Two main types of sequential circuits:
+    - The behavior of a *synchronous sequential circuit* can be defined from the knowledge of its signals at discrete instants of time
+    - The behavior of an *asynchronous sequential circuit* depends upon the inputs at any instant of time and the order in continous time in which the inputs change
+  - Buffers illustrate that storage can be constructed from logic with delay connected in a closed loop; buffers are usually implemented using two inverters
+  - If the inverters are replaced with NOR or NAND gates, the information within the storage element can be changed; asynchronous storage circuits called *latches* are made in this manner
+  - Synchronization in synchronous sequential circuits is achieved by a timing device called a *clock generator* that produces a periodic train of *clock pulses*
+  - Synchronous sequential circuits that use clock pulses as inputs for storage elements are called *clocked sequential circuits*
+  - The storage elements used in the simplest form of clocked sequential circuits are called *flip-flops*; a flip-flop is a binary storage device capable of storing one bit of information
+  - *D flip-flops* are the most prevalent type used today
+  - Other flip-flop types include *JK and T flip-flops*
+  - Flip-flops are constructed from latches
+- 4-2 Latches
+  - The major differences among various types of latches and flip-flops are the number of inputs they posess and the manner in which the inputs affect the binary state
+  - SR and S_bR_b Latches
+    - The SR latch is a circuit constructed from two cross-coupled NOR gates
+      - The latch has two inputs, labeled S for set and R for reset, and two useful states
+      - When output Q = 1 and Q_b = 0, the latch is said to be in the *set state*
+      - When output Q = 0 and Q_b = 1, the latch is said to be in the *reset state*
+      - When both inputs are equal to 1 at the same time, an undefined state with both outputs equal to 0 occurs
+      - Under normal conditions, both inputs of the latch remain at 0 unless the state is to be changed
+    - The S_bR_b latch is a circuit constructed from two cross-coupled NAND gates
+      - It operates with both inputs normally at 1, unless the state of the latch has to be changed
+      - The condition that is undefined for this NAND latch is when both inputs equal to 0 at the same time, an input combination that should be avoided
+      - Note that the input signals for the NAND require the complement of those values used for the NOR
+      - Because the NAND latch requires a 0 signal to change its state, it is referred to as an S_bR_b latch
+    - The operation of the basic NOR and NAND latches can be modified by providing an additional control input that determines when the state of the latch can be changed; the control input C acts as an enable signal for the other two inputs
+    - The SR latch with control input is an important circuit, because other latches and flip-flops are constructed from it
+  - D Latch
+    - This latch has only two inputs: D (data) and C (control)
+    - As long as the control input is 0, the S_bR_b latch has both inputs at the 1 level, and the circuit cannot change state regardless of the value of D
+    - The D input is sampled when C = 1
+    - If D is 1, the Q output goes to 1 (set state)
+    - If D is 0, the Q output goes to 0 (reset state)
+    - The D latch receives its designation from its ability to hold *data* in its internal storage
+    - The binary information present at the data input of the D latch is transferred to the Q output when the control input is enabled (1)
+    - The output follows changes in the data input, as long as the control input is enabled
+    - When the control input is disabled (0), the binary information that was present at the data input at the time the transition in C occurred is retained at the Q output until the control input C is enabled again
+- 4-3 Flip-Flops
+  - A change in value on the control input allows the state of a latch in a flip-flop to switch; this change is called a *trigger*, and it enables, or triggers, the flip-flop
+  - A common way to create a flip-flop is to connect two latches, which is often referred to as a *master-slave* flip-flop
+  - *Pulse-triggered flip-flop*: the inputs to a flip-flop control its state when (1) a clock pulse is present or (2) a clock pulse is not present
+  - *Edge-triggered flip-flop*: triggers only during a signal *transition* from 0 to 1 (or from 1 to 0) on the clock 
+  - The edge-triggered D flip-flop is currently the most common flip-flop in contemporary design
+  - Edge-Triggered Flip-Flop
+    - Some edge-triggered flip-flops trigger on the positive edge (0-to-1 transition) whereas others trigger on the negative edge (1-to-0 transition)
+    - Example of a D-type positive-edge-triggered flip-flop:
+      - Master-slave flip-flop, with the master a D latch and the slave an SR latch or a D latch
+      - An inverter is added to the clock input
+  - Standard Graphics Symbols
+    - *postponed output indicator*: right-angle symbol indicating a pulse-triggered flip-flop
+    - *dynamic indicator*: arrowhead-like symbol denotes a flip-flop that responds to edge transitions of the input clock pulses
+    - Often, all of the flip-flops used in a circuit are of the same triggering type so that all of them will change in relation to the same clocking event
+  - Direct Inputs
+    - Flip-flops often provide special inputs for setting and resetting them asynchronously (i.e., independently of the clock input C)
+    - The inputs that asynchronously set the flip-flop are called *direct set* or *preset*
+    - The inputs that asynchronously reset the flip-flop are called *direct reset* or *clear*
+- 4-4 Sequential Circuit Analysis
+  - Input Equations
+    - The logic diagram of a sequential circuit consists of flip-flops, and, usually, combinational gates
+    - The part of the combinational circuit that generates the signals for the inputs of flip-flops can be described by a set of Boolean functions called *flip-flop input equations*
+  - State Table
+    - The functional relationships among the inputs, outputs, and flip-flop states of a sequential circuit can be enumerated in a *state table*
+    - The state table consists of four sections, labeled *present state, input, next state, and output*
+    - State tables can be one-dimensional or two-dimensional
+    - *Mealy model circuits*: sequential circuits in which the outputs depend on the inputs, as well as on the states
+    - *Moore model circuits*: sequential circuits in which the outputs depend only on the states
+  - State Diagram
+    - The information available in a state table may be represented graphically in the form of a state diagram
+    - A state is represented by a circle, and transitions between states are indicated by directed lines connecting the circles
+    - Two states are *equivalent* if the response for each possible input sequence is an identical output sequence
+    - Two states are *equivalent* if the output produced for each input symbol is identical and the next states for each input symbol are the same or equivalent
+  - Sequential Circuit Simulation
+    - *functional simulation*: the objective is determination or verification of the function of the circuit
+    - *timing simulation*: the circuit elements have realistic delays and verification of the proper operation of the circuit in terms of timing is the simular objective
+- 4-5 Sequential Circuit Design
+  - Design Procedure
+    - The procedure for the design of sequential circuits is similar to the procedure for combinational circuits with some additional steps:
+      - (1) Specification
+      - (2) Formulation
+      - (3) State Assignment
+      - (4) Flip-Flop Input Equation Determination
+      - (5) Output Equation Determination
+      - (6) Optimization
+      - (7) Technology Mapping
+      - (8) Verification
+  - Finding State Diagrams and State Tables
+    - A state is used to "remember" something about the history of input combinations applied to the circuit either at triggerling clock edges or during triggering pulses
+    - In some cases, the states may literally store input values
+    - In most cases, however, a state is an *abstraction* of the sequence of input combinations at the triggering points
+    - Instead of adding a new state for every current state, it is essential that states be reused as next states to prevent uncontrolled state growth
+    - This careful process of avoiding equivalent states is in lieu of applying state-minimization procedure to combine equivalent states
+    - In this chapter, the circuits we design must have a known *initial state*
+    - A *reset* or *master reset* signal is a hardware mechanism provided to get the circuit from any unknown state into this state
+    - The initial state is often called the *reset state*
+    - The reset may be either asynchronous or synchronous
+  - State Assignment
+    - *counting order*: state assignment method in which codes with n bits are assigned such that the code words are assigned in counting order
+    - *Gray code order*: code words are assigned in Gray code order; attractive particularly if K-maps are being used for optimization
+    - *one-hot assignment*: one flip-flop per state; this assignment uses a distinct flip-flop for each of the m states, so it generates codes that are m bits long; the sequential circuit is in a state when the flip-flop corresponding so that state contains a 1; has the property that going from one state to another can be thought of as passing a *token*, the single 1,  from the source state to the destination state
+  - Designing with D Flip-Flops
+    - Gray Code Design for the Sequence Recognizer
+      - Two flip-flops are needed to represent the four states
+    - One-Hot Code Design for the Sequence Recognizer
+      - Four flip-flops are needed to represent the four states
+  - Designing with Unused States
+    - States that are not used in specifying the sequential circuit are not listed in the state table
+    - In simplifying the input equations, the unused states can be treated as don't-care conditions
+  - Verification
+    - Sequential circuits can be verified by showing that the circuit produces the original state diagram or state table
+    - In the simplest cases, all possible input combinations are applied with the circuit in each of the states, and the state variables and outputs are observed
+- 4-6 State-Machine Diagrams and Applications
+  - State-Machine Diagram Model
+    - For a given state, an *input condition* can be described by a Boolean expression or equation in terms of input variables
+    - An input condition on a transition arc is called a *transition condition (TC)* and causes a transition to occur if it is equal to 1
+    - An input condition that, if equal to 1, causes an output action to occur is an *output condition (OC)*
+    - An *unconditional transition* always occurs on the next clock regardless of input values and can be thought of as having an implicit transition condition equal to 1
+    - We classify output actions based on the conditions that cause them into four types:
+      - *Moore output actions* depend only on the state, i.e., they are unconditional
+      - *Transition-condition independent (TCI) Mealy outputs* are preceded by their respective output condition and a slash
+      - *Transition-condition dependent (TCD) Mealy output actions* depend on both the state and a transition condition, thereby making the transition condition an output condition as well
+      - *Transition and output-condition dependent (TOCD) output actions* depend on the state, a transition condition, and an output condition, and are preceded by their respective output condition OC and a slash
+  - Constraints on Input Conditions
+    - For each state, there are two constraints on transition conditions:
+      - (1) The transition conditions from a given state must be mutually exclusive, i.e., all possible pairs of conditions on distinct transition arcs from a given state have no identical input values
+      - (2) The transition conditions from a given state must cover all possible combinations of input values
+    - For each state, there are two similar constraints on output conditions:
+      - (1) For every output action in a state or on its transitions having coincident output variables with differing values, the corresponding pair of output conditions must be mutually exclusive
+      - (2) For every output variable, the output conditions for a state or its transitions must cover all possible combinations of input values that can occur
+  - Design Applications Using State-Machine Diagrams
+    - State-Machine Design for a Batch Mixing System Control
+    - State-Machine Design for a Sliding Door Control
+- 4-7 HDL Representation for Sequential Circuits — VHDL
+  - VHDL can describe storage elements and sequential circuits
+  - These descriptions involve new VHDL concepts, the most important of which is the *process*
+  - To achieve program-like behavior, VHDL uses another construct called a *variable*; in contrast to a signal which evaluates after some delay, a variable evaluates immediately
+- 4-8 HDL Representation for Sequential Circuits — Verilog
+  - Verilog can describe storage elements and sequential circuits
+  - These descriptions involve new Verilog concepts, the most important of which are the *process* and the *register* type for nets
+  - There are two basic types of processes, the *initial* process and the always *process*
+    - The initial process executes only once, beginning at t = 0
+    - The always process also executes at t = 0, but executes repeatedly thereafter
+  - The `#` operator followed by an integer can be used to specify delay
+  - The `@` operator can be viewed as "wait for event" and is followed by an expression that describes the event or events, the occurrence of which will cause the process to execute
+  - *Blocking assignments* (use `=` as the operator) are executed sequentially, much like a program in a procedural language such as C
+  - *Nonblocking assignments* (use `<=` as the operator) evaluate the right-hand side, but do not make the assignment until all right-hand sides have been evaluated 
+  - Guidelines for developing Verilog models that are meant to be synthesized:
+    - Blocking assignments should be used for statements that are meant to create combinational logic
+    - Nonblocking assignments should be used for statements that are meant to create sequential logic
+    - Blocking and nonblocking assignments should not be used in the same always block
+    - Assignments to a particular variable (type reg) should be made in only one always block
+- 4-9 Flip-Flop Timing
+  - Timing parameters are associated with the operation of both pulse-triggered (master-slave) and edge-triggered flip-flops
+  - There is a minimum time called the *setup time, t_s*, for which the S and R or D inputs must be maintained at a constant value prior to the occurrence of the clock transition that causes the output to change
+  - There is a minimum time called the *hold time, t_h*, for which the S and R or D inputs must not change after the application of the clock transition that causes the output to change
+  - There is a *minimum clock pulse width t_w*, to insure that the master has time enough to capture the input values correctly
+  - The *propogation delay times* of the flip-flops are defined as the interval between the triggering clock edge and the stabilization of the output to a new value
+- 4-10 Sequential Circuit Timing
+  - It is important to analyze a circuits performance in terms of the *maximum input-to-output delay* and the *maximum clock frequency, f_max*, at which it can operate
+  - Each path delay has three components:
+    - (1) a flip-flop propogation delay
+    - (2) a combination logic delay through the chain of gates along the path
+    - (3) a flip-flop setup time
+  - Each path has a slack time, t_slack, the extra time allowed in the clock period beyond that required by the path
+  - In order to guarantee that a changing value is captured by the receiving flip-flop, t_slack must be greater than or equal to zero for all of the paths
+- 4-11 Asynchronous Interactions
+  - An *asynchronous circuit* has one or more state-variables changes that occur without being directly synchronized by the special clock input; instead, an asynchronous circuit may change state in response to any of its inputs
+  - Examples of Synchronous/Asynchronous Interfaces:
+    - Synchronous to asynchronous
+    - Asynchronous to synchronous
+    - Synchronous circuits with unrelated clocks
+- 4-12 Synchronization and Metastability
+  - Synchronizing Flip-Flop
+    - A D flip-flop can be added to avoid the behavior exhibited when RDY reached two flip-flops (circuit failed)
+    - The asynchronous signal RDY enters the D flip-flop and RDY_S, its output, is synchronous with signal Clock in the sense that RDY_S changes one flip-flop delay after the positive edge
+  - Metastability
+    - Latches used to construct flip-flops actually have three potential states: stable 1, stable 0, and *metastable* 
+    - When an input to the cross-coupled pair of latch gates changes in just the right timing relationship to the clock edge, a narrow pulse may have just enough energy to change the latch state to the metastable point where both gates have equal output values with voltages between 1 and 0 
+    - The behavior is unlikely, but when it does happen response by the two flip-flops to such a value is unpredictable, so there is a good chance the circuit will fail
+    - One simple solution to the problem is to use a series of synchronizing flip-flops (most common is three or so), i.e., a small shift register; the more flip-flops, the more the circuit response to a change is delayed and the less likely the circuit is to fail due to metastability
+- 4-13 Synchronous Circuit Pitfalls
+  - Just because there is a clock does not mean that a circuit is synchronous
+  - A *suicide counter* (the counter "kills itself" back to value zero) is just one example of a sneaky class of asynchronous circuits posing as synchronous ones
