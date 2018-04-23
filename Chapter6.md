@@ -1,0 +1,171 @@
+CHAPTER 6: REGISTERS AND REGISTER TRANSFERS
+
+- 6-1 Registers and Load Enable
+  - An n-bit register, composed of n flip-flops, is capable of storing n bits of binary information
+  - By the broadest definition, a register consists of a set of flip-flops, together with gates that implement their state transitions
+  - More commonly, the term *register* is applied to a set of flip-flops, possibly with added combinational gates, that perform data-processing tasks
+  - A *counter* is a register that goes through a predetermined sequence of states upon the application of clock pulses
+  - Registers and counters are sequential functional blocks that are used extensively in the design of digital systems in general and in digital computers in paricular
+  - Registers are useful for storing and manipulating information; counters are employed in circuits that sequence and control operations in a digital system
+  - The transfer of new information into a register is referred to as *loading* the register
+  - Register with Parallel Load
+    - Most digital systems have a master clock generator that supplies a continuous train of clock pulses; the pulrses are applied to all flip-flops and registers in the system
+    - A separate control signal (*Load*) is used to control the clock cycles during which the clock pulses are to have an effect on the register
+    - Since the clock is turned on and off at the register C inputs by the use of a logic gate, the technique is referred to as *clock gating*
+    - To leave the output of a D flip-flop unchanged, a new type of D flip-flop, a *D flip-flop with enable* can be used
+    - A register with control input *Load* that is directed through gates into the D inputs of the flip-flops, instead of through the C inputs, is traditionally preferred over clock gating, since it avoids clock skew and the potential for malfunctions of the circuit
+- 6-2 Register Transfers
+  - In most digital system designs, we partition the system into two types of modules: a *datapath*, which performs data-processing operations, and a *control unit*, which determines the sequence of those operations
+  - *Control signals* are binary signals that activate the various data-processing operations
+  - To activate a sequence of such operations, the control unit sends the proper sequence of control signals to the datapath
+  - The control unit, in turn, receives the status bits from the datapath
+  - Examples of register operations are load, clear, shift, and count
+  - A register has the capability to perform one or more elementary operations such as load, count, add, subtract, and shift
+  - An elementary operation performed on data stored in registers is called a microoperation
+  - This chapter introduces register, their implementations and registers transfers using a simple register transfer language (RTL) to represent registers and specify the operations on their contents
+  - The register transfer language uses a set of expressions and statements that resemble statements used in HDLs and programming languages
+- 6-3 Register Transfer Operations
+  - AR = address register
+  - PC = program counter
+  - IR = instruction register
+  - R2 = register 2
+  - The individual flip-flops in an n-bit register are typically numbered in sequence from 0 to n - 1
+  - *little-endian*: 0 bit in the rightmost position and increasing toward the most significant position
+  - *big-endian*: the reverse order, with bit 0 on the left
+  - Data transfer from one register to another: ` R2 <— R1`
+  - Conditional statement: `if(K1 = 1) then (R2 <— R1)`
+  - Conditional statement (alt. form): `K1: R2 <— R1`
+  - Basic Symbols for Register Transfers:
+    - Letters (and numerals) - denotes a register
+    - Parentheses - denotes a part of a register
+    - Arrow - denotes transfer of data
+    - Comma - separates simultaneous transfers
+    - Square brackets - specifies an address for memory
+- 6-4 Register Transfers in VHDL and Verilog
+  - Text RTL, VHDL, and Verilog use different notations for register-transfer operations
+- 6-5 Microoperations
+  - The microoperations most often encountered in digital systems are of four types:
+    - Transfer microoperations
+    - Arithmetic microoperations
+    - Logic microoperations
+    - Shift microoperations
+  - Arithmetic Microoperations
+    - The basic arithmetic microoperations are add, subtract, increment, decrement, and complement
+  - Logic Microoperations
+    - Logic microoperations are useful in manipulating the bits stored in a register
+    - These operations consider each bit in the register separately and treat it as a binary variable
+    - Logic Microoperations:
+      - Logical bitwise NOT (1s complement)
+      - Logical bitwise AND (clears bits)
+      - Logical bitwise OR (sets bits)
+      - Logical bitwise XOR (complements bits)
+    - The AND operation can be used to selectively clear or *mask out* the bits of a register
+    - The OR microoperation is used to set one or more bits in a register
+    - The XOR microoperation can be used to complement one or more bits in a register
+  - Shift Microoperations
+    - Shift microoperations are used for lateral movement of data
+    - A *left shift* is toward the most significant bit
+    - A *right shift* is toward the least significant bit
+- 6-6 Microoperations on a Single Register
+  - The combinational logic implementing the microoperations is assumed to be a part of the register and is called *dedicated logic* of the register
+  - This is in contrast to logic which is shared by multiple destination registers, which is called *shared logic* for the set of destination registers
+  - Multiplexer-Based Transfers
+    - There are occasions when a register receives data from two or more different sources at different times
+    - Such conditional register-transfer statements can be implemented by using a multiplexer to select between the source registers
+  - Shift Registers
+    - A register capable of shifting its stored bits laterally in one or both directions is called a *shift register*
+    - The logical configuration of a shift register consists of a chain of flip-flops, with the output of one flip-flop connected to the input of the next flip-flop
+    - The *serial input SI* is the input to the leftmost flip-flop
+    - The *serial output SO* is taken from the output of the rightmost flip-flop
+    - Shift Register with Parallel Load
+      - A shift register with accessible flip-flop outputs and parallel load can be used for converting incoming parallel data to outgoing serial data and vice versa
+    - Bidirectional Shift Register
+      - A register capable of shifting in only one direction is called a *unidirectional shift register*
+      - A register that can shift in both directions is a *bidirectional shift register*
+  - Ripple Counter
+    - A register that goes through a prescribed sequence of distinct states upon the application of a sequence of input pulses is called a *counter*
+    - A counter that follows the binary number sequence is called a *binary counter*
+    - Counters are available in two categories:
+      - In a ripple counter, the flip-flop output transitions serve as the sources for triggering the changes in other flip-flops
+      - In a synchronous counter, the C inputs of all flip-flops receive the common clock pulse, and the change of state is determined from the present state of the counter
+    - A binary ripple counter is constructed from D flip-flops connected such that the application of a positive edge to the C input of each flip-flop causes the flip-flop to complement its state; the flip-flops change one at a time in quick succession as the signal propogates through the counter in a ripple fashion from one stage to the next
+    - A ripple counter that counts downward can be assomplished by connecting the true output of each flip-flop to the C input of the next flip-flop
+    - Synchronous binary counters are favored in all but low-power designs, where ripple counters have an advantage
+  - Synchronous Binary Counters
+    - In contrast to riple counters, synchronous counters have the clock applied to the C inputs of all flip-flops; thus, the common clock pulse triggers all flip-flops simultaneously rather than one at a time, as in a ripple counter
+    - Serial and Parallel Counters
+      - *serial counters* are said to have *serial gating* where a chain of 2-input AND gates is used to provide information to each stage about the state of the prior stages in the counter (analogous to the carry logic in the ripple carry adder)
+      - *parallel counters* are said to have *parallel gating* and are analogous to carry look ahead adders
+    - Up-Down Binary Counter
+      - A counter that can count both up and down is referred to as an *up-down binary counter*
+    - Binary Counter with Parallel Load
+      - Counters with parallel load are very useful in the design of digital computers; they are also referred to as registers with load and increment operations
+      - A binary counter with parallel load can be converted into a synchronous BCD counter (without load input) by connecting an external AND gate to it
+  - Other Counters
+    - Counters can be designed to generate any desired number of states in sequence
+    - A divide-by-N counter (also known as a modulo-N counter) is a counter that goes through a repeated sequence of N states
+    - BCD Counter
+      - BCD counters can also be designed directly using individual flip-flops and gates
+      - Synchronous BCD counters can be cascaded to form counters for decimal numbers of any length
+    - Arbitrary Count Sequence
+- 6-7 Register-Cell Design
+  - A single-bit call of an iterative combinational circuit, connected to a flip-flop that provides the output, forms a two-state sequential circuit called a *register cell*
+- 6-8 Multiplexer and Bus-Based Transfers for Multiple Registers
+  - A typical digital system has many registers
+  - Paths must be provided to transfer data from one register to another
+  - The amount of logic and the number of interconnections may be excessive if each register has its own dedicated set of multiplexers
+  - A more efficient scheme for transferring data between registers is a system that uses a shared transfer path called a *bus*
+  - A bus is characterized by a set of common lines, with each line driven by selection logic
+  - A single-bus system provides a reduction in hardware over dedicated multiplexers but results in limitations on simultaneous transfers
+  - High-Impedance Outputs
+    - Another method for constructing a bus involves a type of gate called a *three-state buffer*
+    - Thus far, we have considered gates that have only output values logic 0 and logic 1
+    - The three-state buffer provides a third output value referred to as the *high-impedance state* and is denoted by Hi-Z or just plain Z or z
+    - Gates with Hi-Z output capability have two very useful properties:
+      - Hi-Z outputs can be connected together
+      - A Hi-Z output can act as both an output and an input; referred to as a bidirectional input/output
+    - Three-state buffer outputs can be connected together to form a multiplexed output line
+  - Three-State Bus
+    - A bus can be constructed with three-state buffers instead of multiplexers
+    - Advantages over multiplexers:
+      - Many three-state buffer outputs can be connected together to form a bit line of a bus, this bus is implemented using only one level of logic gates
+      - Signals can travel in two directions on a three-state bus
+- 6-9 Serial Transfer and Microoperations
+  - A digital system is said to operate in serial mode when information in the system is transferred or manipulated one bit at a time
+  - Information is transferred one bit at a time by shifting the bits out of one register and into a second register
+  - This method is in contrast to parallel transfer, in which all the bits of the register are transferred at the same time
+  - Serial Addition
+    - Operations in digital computers are usually done in parallel because of the faster speed attainable
+    - Serial operations are slower, but have the advantage of requiring less hardware
+    - Serial Adder: two binary numbers to be added serially are stored in two shift registers; bits are added, one pari at a time, through a single full-adder (FA) circuit
+    - A comparison of a serial adder with a parallel adder provides an example of a space-time trade-off
+      - The parallel adder in space is n times larger than the serial adder (ignoring the area of the carry flip-flop), but it is n times faster
+      - The serial adder, althought it is n times slower, is n times smaller in space
+- 6-10 Control of Register Transfers
+  - The control unit that generates the signals for sequencing the microoperations is a sequential circuit with states that dictate the control signals for the system
+  - There are two distinct types of control units used in digital systems:
+    - In a *programmable system*, a portion of the input to the processor consists of a sequence of instructions and the control unit contains a *program counter* (PC) and associated decision logic, as well as the necessary logic to interpret the instruction
+    - In a *nonprogrammable system*, the control unit is not responsible for obtaining instructions from memory, nor is it responsible for sequencing the execution of those instructions; the control unit determines the operations to be performed and the sequence of those operations, based on its inputs and the status bits from the datapath
+  - This section focuses on nonprogrammable system design (programmable systems covered in Chapters 8 and 10)
+  - Design Procedure
+    - Register-Transfer System Design Procedure
+      - (1) Write a detailed system specification.
+      - (2) Define all external data and control input signals, all external data, control, and status output signals, and the registers of the datapath and control unit.
+      - (3) Find a state machine diagram for the system including the register transfers in the datapath and in the control unit.
+      - (4) Define internal control and status signals. Use these signals to separate output conditions and actions, including register transfers, from the state diagram flow and represent them in tabular form.
+      - (5) Draw a block diagram of the datapath including all control and status inputs and outputs. Draw a block diagram of the control unit if it includes register transfer hardware.
+      - (6) Design any specialized register transfer logic in both the control and datapath
+      - (7) Design the control unit logic.
+      - (8) Verify the correct operation of the combined datapath and control logic. If verification fails, debug the system and reverify it.
+- 6-11 HDL Representation of Shift Registers and Counters - VHDL
+  - Examples of shift register and a binary counter illustrate the use of VHDL in representing registers and operations on register content
+- 6-12 HDL Representation of Shift Registers and Counters - Verilog
+  - Examples of shift register and a binary counter illustrate the use of Verilog in representing registers and operations on register content
+- 6-13 Microprogrammed Control
+  - A control unit with its binary control values stored as a group of bits, which are referred to as *words*, in memory is called a *microprogrammed control*
+  - Each word in the control memory contains a *microinstruction* that specifies one or more microoperations for the system
+  - A microprogrammed control consists of:
+    - Sequencer: control address register (CAR) and next-address generator
+    - Control Memory (ROM)
+    - control data register (CDR) (optional)
+  - As systems have become more complex and performance specifications have increased the need for concurrent parallel sequences of activities, the lockstep nature of microprogramming has become less attractive for control-unit implementation
