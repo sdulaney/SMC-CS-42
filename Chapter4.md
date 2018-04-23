@@ -138,6 +138,10 @@ CHAPTER 4: SEQUENTIAL CIRCUITS
   - VHDL can describe storage elements and sequential circuits
   - These descriptions involve new VHDL concepts, the most important of which is the *process*
   - To achieve program-like behavior, VHDL uses another construct called a *variable*; in contrast to a signal which evaluates after some delay, a variable evaluates immediately
+  - The *if-then-else* within a process is similar in effect to the *when else* concurrent assignment statement
+  - Other new VHDL concepts introduced are type declarations for defining new types and case statements for handling conditions
+  - The *case* statement has an effect similar to the *with-select* concurrent assignment statement
+  - The use of three distinct processes that describe the state storage, the next-state function, and the output function is one methodology for sequential circuit description
 - 4-8 HDL Representation for Sequential Circuits — Verilog
   - Verilog can describe storage elements and sequential circuits
   - These descriptions involve new Verilog concepts, the most important of which are the *process* and the *register* type for nets
@@ -153,6 +157,7 @@ CHAPTER 4: SEQUENTIAL CIRCUITS
     - Nonblocking assignments should be used for statements that are meant to create sequential logic
     - Blocking and nonblocking assignments should not be used in the same always block
     - Assignments to a particular variable (type reg) should be made in only one always block
+  - Other new Verilog concepts introduced are state encoding and case statements for handling conditions
 - 4-9 Flip-Flop Timing
   - Timing parameters are associated with the operation of both pulse-triggered (master-slave) and edge-triggered flip-flops
   - There is a minimum time called the *setup time, t_s*, for which the S and R or D inputs must be maintained at a constant value prior to the occurrence of the clock transition that causes the output to change
