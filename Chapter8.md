@@ -1,0 +1,126 @@
+CHAPTER 8: COMPUTER DESIGN BASICS
+
+- 8-1 Introduction
+  - The specification for a computer consists of a description of its appearance to a programmer at the lowest level, its *instruction set architecture* (ISA)
+  - From the ISA, a high-level description of the hardware to implement the computer, called the *computer architecture*, is formulated
+  - This architecture is typically divided into a datapath and a control
+  - The datapath is defined by three basic components:
+    - A set of registers
+    - The microoperations performed on data stored in the registers
+    - The control interface
+  - The control unit provides signals that control the microoperations performed in the datapath and in other componenets of the system, such as memories
+  - In addition, the control unit controls its own operation, determining the sequence of events that occur
+  - In a more complex computer, typically multiple control units and datapaths are present
+- 8-2 Datapaths
+  - Instead of having each individual register perform its microoperations directly, computer systems often employ a number of storage registers in conjunction with a shared operation unit called an *arithmetic/logic unit (ALU)*
+  - To perform a microoperation, the contents of specified source registers are applied to the inputs of the shared ALU; the ALU performs an operation, and the result of this operation is transferred to a destination register
+  - Datapath: the combination of a set of registers with a shared ALU and interconnecting paths
+  - It is useful to have certain information, based on the results of an ALU operation, available for use by the control unit of the CPU to make decisions:
+    - C - carry
+    - V - overflow
+    - Z - zero status bit: Z = 1 if the result of an operation is 0
+    - N - sign status bit: leftmost bit of the ALU output, which is the sign bit for the result in signed-number representations
+  - The control unit for the datapath directs the information flow through the buses, the ALU, the shifter, and the registers by applying signals to the select inputs of multiplexers in the datapath
+- 8-3 The Arithmetic/Logic Unit
+  - The ALU is a combinational circuit that performs a set of basic arithmetic and logic microoperations
+  - It has a number of selection lines used to determine the operation to be performed
+  - Arithmetic Circuit
+    - The basic component of an arithmetic circuit is a parallel (Ripple Carry) adder, which is constructed with a number of full-adder circuits connected in cascade
+  - Logic Circuit
+    - The logic microoperations manipulate the bits of the operands by treating each bit in a register as a binary variable, giving bitwise operations
+    - There are four commonly used logic operations— AND, OR, XOR, and NOT— from which others can be conveniently derived
+  - Arithmetic/Logic Unit
+    - Function Table for ALU:
+      - Transfer A
+      - Increment A
+      - Addition
+      - Add with carry input of 1
+      - A plus 1s complement of B
+      - Subtraction
+      - Decrement A
+      - Transfer A
+      - AND
+      - OR
+      - XOR
+      - NOT (1s complement)
+- 8-4 The Shifter
+  - The basic shifter performs one of two main types of transformations on the data: right shift and left shift
+  - A combinational shifter can be constructed with multiplexers; it is preferred over a bidirectional shift register with parallel load because the transfer from a source register to a destination register can be done using only one clock pulse instead of three
+  - Barrel Shifter
+    - In datapath applications, often the data must be shifted more than one bit position in a single clock cycle
+    - A *barrel shifter* is one form of combinational circuit that shifts or rotates the input data bits by the number of bit positions specified by a binary value on a set of selection lines
+    - A left-rotation barrel shifter means the bianry data is shifted to the left, with the bits coming from the most significant part of the register rotated back into the least significant part of the register
+    - Note that by using the left-rotation barrel shifter, one can generate all desired right rotations as well; in a 2^n-bit barrel shifter, i positions of left rotation are the same as 2^n - i bits of right rotation
+- 8-5 Datapath Representation
+  - A set of registers having common microoperations performed on them may be organized into a *register file*
+  - Since the ALU and the shifter are shared processing units with outputs that are selected by MUX F, it is convenient to group the two units and the MUX together to form a shared *function unit*
+- 8-6 The Control Word
+  - The selection variables for the datapath control the microoperations executed within the datapath for any given clock pulse
+  - In the example datapath:
+    - The selection variables control the addresses for the data read from the register file, the function performed by the function unit, and the data loaded into the register file, as well as the selection of external data
+    - There are 16 binary control inputs; their combined values specify a *control word*
+    - The control word consists of seven parts called fields:
+      - DA (3 bits): select one of eight destination registers for the result of the microoperation
+      - AA (3 bits): select one of eight source registers for the Bus A input to the ALU
+      - BA (3 bits): select a source register for the 0 input of the MUX B
+      - MB (1 bit): determines whether Bus B carries the contents of the selected source register or a constant value
+      - FS (4 bits): controls the operation of the function unit; contains one of the 15 codes specifying microoperations
+      - MD(1 bit): selects the function unit output or the data on Data in as the input to Bus D
+      - RW(1 bit): determines whether a register is written or not
+- 8-7 A Simple Computer Architecture
+  - A simple computer architecture is introduced to obtain an initial understanding of computer design and to illustrate control designs for programmable systems
+  - In a programmable system, a portion of the input to the processor consists of a sequence of instructions (usually stored in memory, either RAM or ROM)
+  - To execute the instructions in sequence, it is necessary to provide the address in memory of the instruction to be executed which comes from a register called the *program counter (PC)*; the PC has logic that permits it to count and parallel load capability
+  - Executing an instruction means activating the necessary sequence of microoperations in the datapath required to perform the operation specified by the instruction
+  - Instruction Set Architecture
+    - The user specifies the operations to be performed and their sequence by the use of a *program*, which is a list of instructions that specifies the operations, the operands, and the sequence in which processing is to occur
+    - The ability to execute a program from memory is the most important single property of a general-purpose computer
+    - An *instruction* is a collection of bits that instructs the computer to perform a specific operation
+    - We call the collection of instructions for a computer its *instruction set* and a thorough description of the instruction set its *instruction set architecture (ISA)*
+    - Simple ISA's have three major components: storage resources, instruction formats, and instruction specifications
+  - Storage Resources
+    - Instruction memory
+    - Data memory
+    - Program counter (PC)
+    - Register file
+  - Instruction Formats
+    - The format of an instruciton is usually depicted by a rectangular box symbolizing the bits of the instruction, as they appear in memory words or in a control register
+    - The bits are divided into groups or parts called *fields*
+    - Each field is assigned a specific item, such as the operation code ("opcode"), a constant value, or a register file address
+    - An operand is said to be specified *explicitly* if the instruction contains special bits for its identification
+    - An operand is said to be defined *implicitly* if it is included as a part of the definition of the operation itself, as represented by the opcode, rather than being given in the instruction
+    - A constant operand immediately available in the instruction is called an *immediate operand*
+    - Changes in the order of instruction execution are based on the use of instructions referred to as jumps and branches
+  - Instruction Specifications
+    - For each instruction, the opcode is given along with a shorthand name called a *mnemonic*, which can be used as a symbolic representation for the opcode
+    - The mnemonic, along with a representation for each of the additional instruction fields in the format for the instruction, represents the notation to be used in specifying all of the fields of the instruction symbolically
+    - The symbolic representation is then converted to the binary representation of the instruction by a program called an *assembler*
+    - A description of the operation performed by the instruction execution (in text or register transfer-like notation) is given, including the status bits that are affected by the instruction
+    - It is vital to recognize the different between a computer *operation* and a hardware *microoperation*
+      - An operation is specified by an instruction stored in binary, in the computer's memory; the control unit retrieves the instruction from memory and decodes the opcode bits and other info to perform the required microoperations
+      - A microoperation is specified by the bits in a control word in the hardware which is decoded by the computer hardware to execute the microoperation
+      - The execution of a computer operation often requires a sequence or program of microoperations, rather than a single microoperation
+- 8-8 Single-Cycle Hardwired Control
+  - The example computer has a hardwired control unit and fetches and executes an instruction in a single clock cycle, referred to as a single-cycle computer
+  - Instruction Decoder
+    - The instruction decoder is a combinational circuit that provides all of the control words for the datapath, based on the contents of the fields of the instructions
+  - Sample Instructions and Program
+    - Six instructions for the Single-Cycle Computer:
+      - ADI - Add immediate operand
+      - LD - Load memory content into register
+      - ST - Store register content in memory
+      - SL - Shift left
+      - NOT - Complement register
+      - BRZ - If R[SA] = 0, branch to PC + se AD (se = sign extend)
+    - A simple program performs the computation 83 - (2 + 3) using the six instructions
+    - Because the example computer has load and store instructions and does not combine loading and storing of data operands with other operations, it is referred to as having a *load/store* architecture
+  - Single-Cycle Computer Issues
+    - Performing complex operations
+    - An instruction that loads a data word from memory into a register requires at least two clock cycles
+    - Lower limit on the clock period based on a long worst-case delay path
+- 8-9 Multiple-Cycle Hardwired Control
+  - By using multiple clock cycles per instruction a single memory can be used for both data and istructions and more complex instructions (such as LRI ("load register indirect"), SRM ("shift right multiple"), and SLM ("shift left multiple")) can be implemented
+  - In executing an instruction across multiple clock cycles, data generated during the current cycle is often needed in a later cycle; this data can be stored in temporary storage registers that are typically not visible to the user
+  - Sequential Control Design
+    - The design of the sequential control circuit is quite complex and hence the text demonstrates state table development rather than detailed logic implementation (for which logic synthesis or a PLA would be more fitting than manual design of the detailed logic)
+    - It is convenient to separate cycles into two processing steps: *instruction fetch* and *instruction execution*
