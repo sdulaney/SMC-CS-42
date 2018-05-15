@@ -1,0 +1,139 @@
+CHAPTER 10: RISC AND CISC CENTRAL PROCESSING UNITS
+
+- 10-1 Pipelined Datapath
+  - A *pipelined datapath* or a *pipeline* is a datapath in which n sets of registers break the delay of the original datapath into n parts
+  - A better analogy for a pipeline is a production line
+  - The length of time required to process an instruction is called the *latency time*
+  - The *throughput* is the processing rate or rate of output
+  - To provide the mechanism separating the stages in the pipeline, registers are placed between the stages; these registers provide temporary storage for data passing through the pipeline and are called *pipeline platforms*
+  - Execution of Pipeline Microoperations
+    - In a *pipeline execution pattern* diagram, each vertical position represents a microoperation to be performed and each horizontal position represents a clock cycle
+    - When the pipeline is *filling* not all of the pipeline stages are active
+    - When the pipeline is *emptying* not all of the pipeline stages are active
+- 10-2 Pipelined Control
+  - In this section, a control unit is specified to produce a CPU by using the pipelined datapath from the last section
+  - A stage is added for instruction fetch, which lies wholly in the control
+  - Registers are added to the pipeline platforms between stages, as necessary, to pass the decoded instruction information through the pipeline along with the data being processed
+  - Pipeline Programming and Performance
+    - Note that even though the pipeline has four stages, the pipelined computer is not four times as fast as the single-cycle computer, because delays of the latter cannot be divided exactly into four pieces and because of the delays of the added pipeline platforms
+    - Also, filling and emptying the pipeline reduces its speed enough that the speed of the pipelined computer is less than the ideal maximum speed of 3.4 times as fast as the single-cycle computer
+- 10-3 The Reduced Instruction Set Computer
+  - RISC Instruction Set Architecture:
+    - Load/store memory access
+    - Four addressing modes
+    - Single instruction format length
+    - Instructions that require only elementary operations
+  - Instruction Set Architecture
+    - All registers are 32 bits
+    - The register file has 32 registers, R0 through R31; R0 is a speical register that supplies the value zero when used as a source and discards the result when used as a destination
+    - The size of the programmer-accessible register file is comparatively large in the RISC because of the load/store instruction set architecture
+    - In addition to the register file, only a program counter (PC) is provided
+    - If stack pointer-based or processor status register-based operations are required, tey are simply implemented by sequences of instructions using registers
+    - RISC CPU Instruction Formats:
+      - Three-register type
+      - Two-register type
+      - Branch
+    - RISC Instruction Operations:
+      - All of the operations are elementary and can be described by a single register transfer statement
+      - The only operations that can access memory are Load and Store
+      - A significant number of immediate instructions help to reduce data memory accesses and speed up execution when constants are employed
+      - The absence of store versions of status bits is handled by the use of three instructions: Branch if Zero (BZ), Branch if Nonzero (BNZ), and Set if Less Than (SLT)
+      - The Jump and Link (JML) instruction provides a mechanism for implementing procedures
+  - Addressing Modes
+    - The four addressing modes in the RISC are register, register indirect, immediate, and relative
+    - The mode is specified by the operation code, rather than by a separate mode field
+    - When programmers want to use an addressing mode not provided by the instruction set architecture, such as indexed addressing, they must use a sequence of RISC instructions
+  - Datapath Organization
+    - The pipelined datapath in Figure 10-2 serves as the basis for the datapath here, and we deal only with modifications:
+      - In the new datapath, there are 32 32-bit registers
+      - The single-bit position shifter is replaced with a barrel shifter to permit multiple-position shifting
+      - In the function unit, the ALU is expanded to 32 bits
+      - A *read-after-write* register file is used, in which it is possible to read data written into the register file during the first half of the same clock cycle
+  - Control Organization
+    - The control organization in the RISC is modified from that in Figure 10-4 in order to deal with the new instruction set
+    - The heart of the control unit is the instruction decoder; this is combinational circuitry that converts the operation code in the IR into the control signals necessary for the datapath and control unit
+    - The Control Words for Instructions can serve as the basis for the design of the instruction decoder; because the logic is complex it is most easily designed by using a computer-based logic synthesis program
+  - Data Hazards
+    - Hazards are timing problems that arise because the execution of an operation in a pipeline is delayed by one or more clock cycles from the time at which the instruction containing the operation was fetched
+    - *Data hazard*: if a subsequent instruction tries to use the result of the operation as an operand before the result is available, it uses the old or stale value, which is very likey to give a wrong result
+    - Three solutions to deal with data hazards: one that uses software and two that use hardware
+      - (1) Have the compiler or programmer generate the machine code to delay instructions so that new values are available by inserting No-operation (NOP) instructions
+        - Throughput penalty due to added NOP instructions
+      - (2) Instead of the programmer or compiler putting NOP's in the program, the hardware inserts the NOP's automatically
+        - When the actions associated with an instruction flowing through the pipe are prevented from happening at a given point, the pipeline is said to contain a *bubble* in subsequent clock cycles and stages for that instruction
+        - When the pipeline flow is held for an extra clock cycle, the pipeline is said to be *stalled*, and if the cause of the stall is a data hazard, then the stall is referred to as a *data hazard stall*
+        - Same throughput penalty as the program with the NOP's
+      - (3) A second hardware solution, *data forwarding*, does not have the same throughput penalty
+        - When a data hazard is detected, the result is available somewhere else in the pipeline, and can be used immediately in the operation having the data hazard
+    - Data hazards can also occur with memory access, as well as with register access
+  - Control Hazards
+    - Control hazards are associated with branches in the control flow of the program
+    - One form of control hazard is when instructions complete execution even though the programmer's intention was for them to be skipped
+    - Three solutions to deal with data hazards: one that uses software and two that use hardware
+      - (1) NOP instructions can be used to deal with control hazards just as they were with data hazards
+        - When control hazards in the CPU are handled in this manner by programming, the branch hazard dealt with by NOP's is referred to as a *delayed branch*
+      - (2) A stall can be used to deal with the control hazard, referred to as a *branch hazard stall*
+        - Reduction in throughput will be the same as with the insertion of NOP's
+      - (3) A second hardware solution is to use *branch prediction*
+        - In its simplest form, this method predicts that branches will never be taken
+        - Thus, instructions will be fetched and decoded and operands fetched on the basis of the addition of 1 to the value of the PC
+        - These actions occur until it is known during the execution cycle whether the branch in question will be taken
+        - When the branch is taken, bubbles are inserted into the pipeline and have the same effect as NOP instructions
+        - Because the NOP's are not present in the program, there is no delay or performance penalty when the branch is not taken
+        - Branch prediction can also be done on the assumption that the branch is taken
+- 10-4 The Complex Instruction Set Computer
+  - CISC Instruction Set Architecture:
+    - Often employs a sizable number of addressing modes
+    - Often employs variable-length instructions
+    - The support for decision making via conditional branching is also more sophisticated
+  - Suppose that we are to implement a CISC architecture, but we are interested in approaching a throughput of one instruction per short RISC clock cycle for simple, frequently used instructions
+  - To accomplish this goal, we use a pipelined datapath and a combination of pipelined and microprogrammed control
+  - The preceding organization supports an architecture that has combined CISC-RISC properties; it illustrates that pipelines and microprograms can be compatible and need not be viewed as mutually exclusive
+  - ISA Modifications
+    - The first modification is the addition of a new format for branch instructions
+    - The second modification is to partition the Register file to provide addressing for 16 temporary registers for multiple-pass use of the datapath
+    - The third modification is the addition of condition codes (also called flags): zero (Z), negative (N), carry (C), overflow (V), and less than (L)
+  - Datapath Modifications
+    - Several changes to the datapath are required to support the ISA modifications
+      - Modifications are made to the Constant unit to handle the change in the length of the target offset
+      - The Register address logic from the multiple-cycle computer from Chapter 8 is added to the address inputs of the Register file
+      - A number of changes are made to support the modification adding condition codes
+  - Control Unit Modifications
+    - The addition of a microprogrammed control to the control unit to support instruction implementation using multiple passes through the pipeline causes significant changes to the existing control
+    - To support the necessary operations, control fields are modified and new control fields are added
+  - Microprogrammed Control
+    - The control is centered about the Microcode ROM, which has an 8-bit address and stores up to 256 41-bit microinstructions
+    - The microprogram counter MC stores the address corresponding to the current microinstruction
+  - Microprograms for Complex Instructions
+    - Three examples illustrate complex instructions implemented by using the CISC capabilities provided by the design just completed:
+      - LD Instruction with Indirect Indexed Addressing (LII)
+      - Branch on Less Than or Equal to (BLE)
+      - Move Memory Block (MMB)
+- 10-5 More on Design
+  - In this section, we will deal with additional features for speeding up the fundamental RISC pipeline
+  - Advanced CPU Concepts
+    - Among the various methods used to design advanced CPUs are multiple units organized as a pipeline-parallel structure, superpipelines, and superscalar architectures
+    - If a large number of pipeline stages is used, the CPU is said to be *superpipelined*
+    - The goal of a *superscalar* architecture is to have a peak rate of issuing instructions for execution in excess of one instruction per clock cycle using multiple parallel execution units
+    - Following are three methods for preventing hazards from stalling the pipeline in superpipelined and superscalar processors:
+      - *Branch prediction* is based on various approaches to recording the recent history of branches taken/not taken; it must achieve a high rate of correct speculation in order to achieve performance improvement
+      - Instead of waiting to load data from memory until it is known that the data is needed, *speculative loading* of data from memory is performed
+      - *Data speculation* uses methods to predict data values and use the predicted values to proceed with computation
+        - Data speculation is often used in *prefetching*— executing loads before stores upon which the loaded values may depend have been completed
+  - Recent Architectural Innovations
+    - The techniques in the previous section all have the goal of exploiting *instruction level parallelism (ILP)*
+    - The new direction for performance improvement to begin the 21st century has been the use of multiple-CPU-processors on a single chip in servers and desktop and laptop PCs, along with the continuing advancements in IC technology, rather than increased clock frequencies and more aggressive instruction-level parallelism
+    - MIMD and Symmetric On-Chip Core Multiprocessors
+      - These products are categorized as multiple-instruction-stream, multiple-data-stream (MIMD microprocessors)
+      - Examples: Intel Core 2 Duo, Intel Core i7
+    - SIMD and Vector Processing
+      - Support for single-instruction-stream, multiple-data-stream (SIMD) processors and vector processing has results in extensions to the instruction sets of major companies in response to the need for vector processing in PC microprocessors for multimedia applications
+      - Example: THE STI Cell Processor
+        - Based on the PowerPC architecture
+    - Graphics Processing Units
+      - Related to the introduction of SIMD capabilities to CPUs is the development of graphics processing units (GPUs) which grew from the addition of functions for accelerating 2D and 3D raphics to video graphics controllers
+      - GPUs are a distinct category from CPUs that are the focus of this text, with their own nomenclature and a narrower focus on graphics- and video-related applications
+      - GPUs are not intended to replace CPUs but rather to serve as a co-processor for improved graphics
+      - Using GPUs for non-graphis applications is typically referred to as general-purpose computing on graphics processing units (GPGPU), and has benefited from several efforts to develop general purpose programming languages for GPUs instead of relying on graphics languages and application programming interfaces
+      - In terms of architectural approaches, GPUs do not fit cleanly into the MIMD/SIMD categories described earlier in this section
+      - GPUs exploit both thread-level and data-level parallelism
