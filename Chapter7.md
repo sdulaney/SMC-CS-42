@@ -1,0 +1,73 @@
+CHAPTER 7: MEMORY BASICS
+
+- 7-1 Memory Definitions
+  - In digital systems, memory is a collection of cells capable of storing binary information
+  - In addition to these cells, memory contains electronic circuits for storing and retrieving the information
+  - Two types of memories are used in various parts of a computer:
+    - *random-access memory (RAM)*: can perform both the write and the read operations
+    - *read-only memory (ROM)*: performs only read operations
+- 7-2 Random-Access Memory
+  - Memory cells can be accessed to transfer information to or from any desired location, with the access taking the same time regardless of the location, hence the name *random-access memory*
+  - In contrast, *serial memory*, such as is exhibited by a hard drive, takes different lengths of time to access information, depending on where the desired location is relative to the current physical position of the disk
+  - Binary information is stored in memory in groups of bits, each group of which is called a *word*; a word is an entity of bits that moves in and out of memory as a unit
+  - A group of eight bits is called a *byte*
+  - The memory unit is specified by the number of words it contains and the number of bits in each word
+  - Each word in memory is assigned an identification number called an *address*
+  - Write and Read Operations
+    - A *write* is a transfer into memory of a new word to be stored
+    - A *read* is a transfer of a copy of a stored word out of memory
+    - Memory is made up of RAM integrated circuits (chips) plus additional logic circuits
+  - Timing Waveforms
+    - Instead of employing the CPU clock, the read and write operations of memory are timed by changes in values on the control inputs
+    - The *access time* of a memory read operation is the maximum time from the application of the address to the appearance of the data at the Data Output
+    - The *write cycle time* is the maximum time from the application of the address to the completion of all internal memory operations required to store a word
+  - Properties of Memory
+    - Integrated-circuit RAM may be either static or dynamic:
+      - Static RAM (SRAM) consists of internal latches that store the binary information
+        - The stored information remains valid as long as power is applied to the RAM
+        - Easier to use and has shorter read and write cycles
+      - Dynamic RAM (DRAM) stores the binary information in the form of electric charges on capacitors
+        - The capacitors are accessed inside the chip by n-channel MOS transistors
+        - The store charge on the capacitors tends to discharge with time, and the capacitors must be periodically recharged by *refreshing* the DRAM; this is done by cycling through the words every few milliseconds, reading and rewriting them to restore the decaying charge
+        - Offers reduced power consumption and alrger storage capacity in a single memory chip
+    - Memory units such as SRAM and DRAM that lose stored information when power is turned off are said to be *volatile*
+    - *Nonvolatile memory*, such as magnetic disk, retains its stored information after removal of power
+      - This is because the data stored on magnetic componenets is represented by the direction of magnetization, which is retained after power is turned off
+- 7-3 SRAM Integrated Circuits
+  - The internal structure of a RAM chip of *m* words with *n* bits per word consists of an array of *mn* binary storage cells and associated circuitry
+    - The circuitry is made up of decoders to select the word to be read or written, read circuits, write circuits, and output logic
+  - The *RAM cell* is the basic binary storage cell used in the RAM chip
+  - A SRAM cell is modeled by an SR latch
+  - To obtain simplified static RAM diagrams, we interconnect a set of RAM cells and read and write circuits to form a *RAM bit slice* that contains all of the circuitry associated with a single bit position of a set of RAM words
+  - Coincident Selection
+    - The total number of decoder gates, the number of inputs per gate, and the number of RAM cells per bit slice can all be reduced by employing two decoders instead of one with a *coincident selection* scheme
+- 7-4 Array of SRAM ICs
+  - If the memory unit needed for an application is larger than the capacity of one chip, it is necessary to combine a number of chips in an array to form the required size of memory
+  - The capacity depends on two parameters: the number of words and the number of bits per word
+  - Two techniques are described to assemble an array of identical chips into a large-capacity memory
+  - An external decoder is needed to select the individual chips based on the additional address bits of the composite memory
+  - To reduce the number of pins on the chip package, many RAM ICs provide common terminals for the data input and data output, said to be *bidirectional*
+- 7-5 DRAM ICs
+  - Because of its ability to provide high storage capacity at low cost, dynamic RAM (DRAM) dominates the high-capacity memory applications , including primary RAM in computers
+  - As the name "dynamic" implies, the storage of information is inherently only temporary; and therefore the information must be periodically "refreshed" to mimic the behavior of static storage
+  - The need for refresh is the primary logical difference in the behavior of DRAM compared to SRAM
+  - DRAM Cell
+    - A DRAM cell consists of a capacitor and a transistor
+    - In order to understand the read and write operations for the cell, a hydraulic analogy with charge replaced by water, the capacitor by a small storage tank, and the transistor by a valve is used
+  - DRAM Bit Slice
+    - The DRAM cost per bit is less than one-third the SRAM cost per bit, which justifies the use of DRAM in large memories
+    - To support refresh, there is a Refresh counter and Refresh controller
+    - Each row of a DRAM chip requires refreshing within a specified maximum refresh time, typically ranging from 16 to 64 milliseconds (ms)
+- 7-6 DRAM Types
+  - Over the last two decades, both capacity and speed of DRAM have increased significantly
+  - The quest for speed has resulted in the evolution of many types of DRAM
+  - Synchronous DRAM (SDRAM)
+    - The use of clocked transfers differentiates SDRAM from conventional DRAM
+  - Double-Data-Rate SDRAM (DDR SDRAM)
+    - DDR SDRAM overcomes the speed limit of SDRAM by providing two byes of data per clock period by using both the positive and negative clock edges
+  - RAMBUS DRAM (RDRAM)
+    - RDRAM ICs are designed to be integrated into a memory system that uses a packet-based bus for the interaction between the RDRAM ICs and the memory bus to the processor
+- 7-7 Arrays of Dynamic RAM ICs
+  - Many of the same design principles used for SRAM arrays apply to DRAM arrays
+  - A number of different requirements for the control and addressing of DRAM arrays are typically handled by a *DRAM controller*
+  - The DRAM controller is a complex synchronous sequential circuit with the external CPU clock providing synchronization of its operation
