@@ -1,0 +1,93 @@
+CHAPTER 5: DIGITAL HARDWARE IMPLEMENTATION
+
+- 5-1 The Design Space
+  - For a given design, there is typically a target implementation technology that specifies the primitive elements available and their properties
+  - The *design space* describes the target technologies and the parameters used to characterize them
+  - Integrated Circuits
+    - Digital circuits are constructed with integrated circuits
+    - An integrated circuit (IC) is a silicon semiconductor crystal, informally called a chip, containing the electronic components for the digital gates and storage elements
+    - Levels of Integration
+      - Small-scale integrated (SSI)
+      - Medium-scale integrated (MSI)
+      - Large-scale integrated (LSI)
+      - Very-large-scale integrated (VLSI)
+  - CMOS Circuit Technology
+    - Digital integrated circuits are classified not only by their function, but also by their specific implementation technology
+    - Currently, silicon-based complementary metal oxide semiconductor (CMOS) technology dominates due to its high circuit density, high performance, and low power consumption
+    - CMOS Transistor
+      - The foundation for CMOS technology is the MOS (metal-oxide semiconductor) transistor
+      - Transistors and the interconnections between them are fabricated as elements of an integrated circuit die, less formally referred to as a chip
+      - Each rectangular die is cut from a very thin slice of crystalline silicon called a wafer
+      - The structure consists of two indentical conductive regions, the *source* and the *drain*, with a gap in between that lies under the gate; this gap is referred to as the *channel*
+      - When the gate voltage is at least the threshold voltage of the transistor above the source voltage, and the drain voltage is sufficiently above the source voltage, a thin layer of substrate becomes a conducting layer between the source and the train; this permits a current to flow between the source and the drain and the transistor is said to be ON
+      - If the gate-to-source voltage is less than the threshold voltage, the channel will be absent, blocking significant current flow; in this case, the transistor is said to be OFF
+      - A switchlike behavior is a good first-order model for an MOS transistor
+    - CMOS Transistor Models
+      - CMOS technology employs two types of transistor: n-channel and p-channel
+      - n-channel
+        - The contact is open (no path exists) for the input variable X equal to 0 and closed (a path exists) for input variable X equal to 1
+        - Referred to as being *normally open*
+      - p-channel
+        - The contact is open (no path exists) for the input variable X equal to 1 and closed (a path exists) for input variable X equal to 0
+        - Referred to as being *normally closed*
+    - Circuits of Switches
+      - A circuit made up of switches that model transistors can be used to design CMOS logic
+      - In general, switches in series give an AND function and switches in parallel an OR function
+    - Fully Complementary CMOS Circuits
+      - In order to have a *static* CMOS circuit, both the 0s and the 1s of the function F must be implemented with paths through the circuits
+  - Technology Parameters
+    - The most important parameters used to characterize an implementation technology are:
+      - Fan-in: the number of inputs available on a gate
+      - Fan-out: the number of standard loads driven by a gate output
+      - Noise margin: maximum external noise voltage superimposed on a normal input value that will not cause an undesirable change in the circuit output
+      - Cost (for a gate): measure of its contribution to the cost of the integrated circuit containing it
+      - Propagation delay: time required for a chance in value of a signal to propogate from input to output
+      - Power consumption (dissipation): power drawn from the power supply and consumed by the gate
+    - Fan-in
+      - For high-speed technologies, fan-in is often restricted on gate primitives to no more than four or five, primarily due to electronic considerations related to gate speed
+    - Fan-out
+      - One approach to measuring fan-out is the use of a standard load
+      - Each input on a driven gate provides a load on the output of the driving gate which is measured in standard load units
+    - Cost
+      - For integrated circuits, the cost of a primitive gate is usually based on the area occupied by the layout cell for the circuit
+      - The layout-cell area is proportional to the size of the transistors and the wiring in the gate layout
+      - Ignoring the wiring area, the area of the gate is proportional to the number of transistors in the gate, which in tern is usually proportional to the gate-input cost
+      - From a system standpoint, as important as the manufacturing cost per primitive logic gate is the overall cost to design, verify, and test the integrated circuit
+      - Non-recurring engineering (NRE) costs are one-time costs that will be incurred no matter how many units of the product are manufactured
+      - In contrast to NRE costs, production costs are those costs that are incurred for each unit of the product that is built, based upon the labor, materials, and energy required to manufacture the unit
+      - As an alternative to a custom integrated circuit, low volume products are often based on programmable logic devices
+      - The NRE costs for the programmable devices are much lower than for custom integrated circuits, as is the time required to bring the device to market
+      - The disadvantages of programmable devices relative to custom integrated circuits include larger propogation delays (lower performance) and higher per-unit cost
+- 5-2 Programmable Implementation Technologies
+  - Read-Only Memory
+    - A read-only memory (ROM) is essentially a device in which "permanent" binary information is stored
+    - The information must be specified by the designer and is then embedded into the ROM to form the required interconnection or electronic device pattern
+    - Once the pattern is established, it stays within the ROM even when power is turned off an on again— that is, ROM is nonvolatile
+    - There are k inputs and n outputs; the inputs provide the address for the memory, and the outputs give the data bits of the stored word that is selected by the address
+    - In general, a 2^k x n ROM will have an internal k-to-2^k-line decoder and n OR gates
+    - Each OR gate has 2^k inputs, which are connected through programmable connections to each of the outputs of the decoder
+    - Depending on the programming technology and approaches, read-only memories have different names
+      - ROM - mask programmed
+      - PROM - fuse or anti-fuse programmed
+      - EPROM - erasable floating gate programmed
+      - EEPROM or E^2PROM - electrically erasable floating gate programmed
+      - FLASH Memory - electrically erasable floating gate with multiple erasure and programming modes
+  - Programmable Logic Array
+    - The PLA has an array of AND gates that can be programmed to generate product terms of the input variables
+    - The product terms are then selectively connected to OR gates to provide the sum of products for the required Boolean functions
+    - The output of the OR gates go to an XOR gate, where the other input can be programmed to receive a signal equal to either logic 1 or logic 0; the output is inverted when the XOR input is connected to 1, the output does not change when the XOR input is connected to 0
+    - The PLA implements sum-of-products or complemented sum-of-products functions
+  - Programmable Array Logic Devices
+    - The programmable array logic (PAL) device is a PLD with a fixed OR array and a programmable AND array
+    - Because only the AND gates are programmable and cannot be shared by multiple functions, design for the PAL device is easier, but is not as flexible as that for the PLA
+  - Field Programmable Gate Array
+    - The most common form of programmable logic device currently available is the field programmable gate array (FPGA)
+    - Most FPGA devices have three programmable elemtns in common: programmable logic blocks, programmable interconnect, and programmable input/output pins
+    - In addition to these three common elements, many FPGA's have specialized blocks of dedicated logic such as memories, arithmetic componenets, and even microprocessors
+    - Most FPGA families are configured using static random access memory (SRAM)
+    - A programmable logic block contains combinational and sequential logic that can be configured to implement many different functions
+    - Many FPGA families have programmable logic blocks based upon a look-up table (LUT) to implement combinational functions
+    - A look-up table is a 2^k x 1 memory that implements the truth table for a function of k variables, referred to as a k-LUT
+    - To implement functions of more than k variables, several k-LUTs can be connected together with multiplexers
+    - In addition to LUTs, programmable logic blocks typically have multiplexers, flip-flops, and other logic to provide the ability to configure the block to implement a wide variety of functions
+    - Configuring the programmable logic block requires setting the configuration bits to achieve the desired functionality

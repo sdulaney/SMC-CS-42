@@ -1,0 +1,108 @@
+CHAPTER 11: INPUT-OUTPUT AND COMMUNICATION
+
+- 11-1 Computer I/O
+  - The input and output subsystem of a computer provides an efficient mode of communication between the CPU and the outside environment
+- 11-2 Sample Peripherals
+  - Devices that the CPU controls directly are said to be connected *online*
+  - Input or output devices attached to the computer online are called *peripherals*
+  - Keyboard
+    - The keyboard is among the simplest of the electromechanical devices attached to the typical computer
+    - Since it is manually controlled, it has one of the slowest data rates of any peripheral
+    - To detect which of the keys has been depressed, a *scan matrix* that lies beneath the keys is used, with a decoder driving the X lines of the matrix and a multiplexer attached to the Y lines
+    - The decoder and the multiplexer are controlled by a microcontroller, a tiny computer that contains RAM, ROM, a timer, and simple I/O interfaces
+    - Whether a key is depressed or released, the control code at the time of the event is sensed and is translated by the microcontroller into a *K-scan code*
+    - When a key is depressed, a *make code* is produced
+    - When a key is released, a *break code* is produced
+  - Hard Drive
+    - The hard drive is the primary intermediate-speed, nonvolatile, writable storage medium for most computers
+    - The typical hard drive stores information serially on a nonremovable disk
+    - There are one or more read/write *heads* per recording surface
+    - Each disk is divided into concentric *tracks*
+    - The set of tracks that are at the same distance from the center of all disk surfaces is referred to as a *cylinder*
+    - Each track is divided into *sectors* containing a fixed number of bytes
+    - Currently available hard drives use logical block addressing (LBA) in which each sector is addressed using a single integer, with sectors numbered sequentially
+    - The mapping from this address to the physical address is typically accomplished in the drive controller or drive electronics
+    - To enable information to be accessed, the set of heads is mounted on an actuator that can move the heads radially over the disks
+    - The time required to move the heads from the current cylinder to the desired cylinder is called the *seek time*
+    - The time required to rotate the disk from its current position to that having the desired sector under the heads is called the *rotational delay*
+    - The *controller time* is the amount of time required by the drive controller to access and output information
+    - The time required to locate a word on the disk is the *disk access time*, which is the sum of the controller time, the seek time, and the rotational delay
+    - The transfer rate for a block of words, once the block has been located, is the *disk transfer rate*
+  - Liquid Crystal Display Screen
+    - The LCD screen is the primary interactive output device for both laptop and desktop computers
+    - The display screen is defined in terms of picture elements called *pixels*
+    - The specific liquid crystals used in LCDs are called *nematic liquid crystals*
+    - Besides the liquid crystal sandwiches, the remaining circuitry within the LCD panel includes the capacitance, the transistor, the gate lines, and the data lines, similar to DRAM using coincident selection via rows and columns
+    - The inputs to the Data Lines and Gate Lines are provided by the driver circuitry for the LCD panel; there is a display controller that may be combined with the driver circuitry
+  - I/O Transfer Rates
+    - The peak data rates required by particular peripherals we have considered have a wide range
+    - The bus system must be designed to handle the highest transfer rates between peripherals and memory
+- 11-3 I/O Interfaces
+  - Peripherals connected to the computer need special communication links to interface them with the CPU
+  - The purpose of these links is to resolve the differences in the properties of the CPU and memory and the properties of each peripheral
+  - Computer systems include special hardware components between the CPU and the peripherals to supervise and synchronize all input and output; these components are called *interface units*
+  - In addition, each device has its own controller to supervise the operations of the particular mechanism of that peripheral
+  - I/O Bus and Interface Unit
+    - Each peripheral has an interface unit associated with it; the common bus from the CPU is attached to all peripheral interfaces
+    - To communicate with a particular device, the CPU places a device address on the address bus which is decoded by the interface
+    - At the same time, the CPU provides a function code on the control lines
+    - The selected interface responds to the function code and proceeds to execute it
+    - Two ways that external computer buses communicate with memory and I/O:
+      - *memory-mapped I/O*: common data, address, and control buses for both memory and I/O
+      - *isolated I/O configuration*: share a common address bus and data bus, but use different control lines for memory and I/O
+  - Example of I/O Interface
+    - A typical I/O interface unit consists of two data registers called *ports*, a control register, a status register, a bidirectional data bus, and timing and control circuits
+  - Strobing
+    - Data transfers using *strobing* use a Strobe signal to communicate transfers on a data bus, but have the disadvantage that there is no indication that the data was ever captured by the destination unit
+  - Handshaking
+    - The *handshaking* method uses two control signals to deal with the timing of transfers: Request and Reply
+    - The handshaking scheme provides a high degree of flexibility and reliability, because the successful completion of data transfer relies on active participation by both the source and destination unit
+- 11-4 Serial Communication
+  - The transfer of data between two units may be parallel or serial
+    - In parallel data transfers, each bit of the message has its own path, and the entire message is transmitted at one time
+    - In serial data transmission, each bit in the message is sent in sequence, one at a time
+  - Serial transmission is slower, but less expensive, since it requires only one conductor
+  - Since telephone lines were originally dsigned for voice communication, but computers communicate in terms of digital signals, devices for conversion called *data sets* or *modems* (modulator-democulators) are needed
+  - A *simplex* line carries information in one direction only
+  - A *half-duplex* transmission system is capable of transmitting in both directions, but in only one direction at a time
+  - A *full-duplex* transmission system can send and receive data in both directions simultaneously
+  - The serial transmission of data can be synchronous or asynchronous:
+    - In *synchronous transmission*, the two units share a common clock frequency, and bits are transmitted continuously at that frequency
+    - In *asynchronous transmission*, binary information is sent only when it is available, and the line remains idle when there is no information to be transmitted
+  - Synchronous Transmission
+    - The modems employed in synchronous transmission have internal clocks that are set to the frequency at which bits are being transmitted, and the receiver clock is continously adjusted to be maintained at the frequency of the incoming bit stream
+  - The Keyboard Revisited
+    - In the keyboard controller, the microcontroller converts the K-scan code to a more standard scan code, which it plates in the Input register and sends an interrupt signal to the CPU, indicating that a key has been pressed
+    - The interrupt-handling routine reads the scan code from the input register into a special area in memory; this area is manipulated by the software stored in the Basic Input/Output System (BIOS) that can translate the scan code into an ASCII character code for use by applications
+  - A Packed-Based Serial I/O Bus
+    - Packet-based serial I/O permits many different external I/O devices to use a shared communication structure instead of dedicated cables
+    - One example is the Universal Serial Bus (USB), which is becoming commonplace as the connection approach of choice for slow-speed to medium-speed I/O devices
+    - USB information is transmitted in packets of different types
+    - USB supports many different kinds of transactions; in addition, the attachment and detachment of devices is sensed and can trigger various software reactions
+    - In general, there is substantial software in the computer to support the details of the control and operation of the USB
+- 11-5 Modes of Transfer
+  - Data transfer to and from peripherals may b ehandled in one of three possible modes:
+    - Data transfer under program control
+    - Interrupt-initiated data transfer
+    - Direct memory access transfer
+  - Example of Program-Controlled Transfer
+    - The interface sets a bit in the status register, called the *flag*, that the CPU must check to determine whether there is a new byte in the interface data register
+    - The difference in information tranfer rate between the CPU and the I/O device makes this type of transfer inefficient; the CPU will check the flag 100,000 times between each transfer
+  - Interrupt-Initiated Transfer
+    - An alternative to having the CPU constantly monitor the flag is to let the interface inform the computer when it is ready to transfer data via the interrupt facility
+    - There are two methods for how the processor chooses the branch address of the service routine:
+      - *vectored interrupt*: the source that interrupts supplies the branch address to the computer, called the *vector address*
+      - *nonvectored interrupt*: the branch address is assigned to a fixed location in memory
+- 11-6 Priority Interrupt
+  - A priority interrupt system establishes a priority over the various interrupt sources to determine which interrupt request to service first when two or more are pending simultaneously
+  - Daisy Chain Priority
+    - The *daisy chain* method of establishing priority consists of a serial connection of all devices that request an interrupt
+  - Parallel Priority Hardware
+    - The parallel priority interrupt method uses a register with bits set separately by the interrupt signal from each device
+    - Priority is established according to the position of the bits in the register
+- 11-7 Direct Memory Access
+  - In the transfer technique called direction memory access (DMA), the DMA controller takes over the buses from the CPU to manage the transfer directly between the I/O device and memory
+  - DMA Controller
+    - In addition to the usual circuits of an interface to communicate with the CPU and the I/O device, the DMA controller needs an address register, a word-count register, and a set of address lines
+  - DMA Transfer
+    - DMA transfer is very useful in many applications, including the fast transfer of information between hard drives and memory, and between memory and graphic displays

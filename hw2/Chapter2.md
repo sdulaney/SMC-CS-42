@@ -1,0 +1,134 @@
+CHAPTER 2: COMBINATIONAL LOGIC CIRCUITS
+
+- 2-1 Binary Logic and Gates
+  - Binary Logic
+
+    - Binary logic deals with binary variables which take on two discrete values; the three basic logical operations are AND, OR, and NOT
+
+  - Logic Gates
+    - Logic gates are electronic circuits that operate on one or more input signals to produce an output signal
+    - Commonly Used Logic Gates: AND, OR, NOT (inverter), NAND, NOR, Exclusive-OR (XOR), Exclusive-NOR (XNOR)
+    - NAND and NOR gates can be used to implement all possible Boolean functions and are therefore universal gates; actual circuit implementations are often done in terms of these gate types
+  - HDL Representations of Gates
+    - Hardware description languages such as Verilog and VHDL provide an alternative for representing logic circuits  that is more practical than logic functions, truth tables, or schematics for larger, more complex circuits
+    - HDLs resemble programming languages but are specifically oriented to describing hardware structures and behavior
+    - Verilog has built-in primitives for combinational logic circuits
+    - VHDL has logic operators that can be used to model the basic combinational gates
+- 2-2 Boolean Algebra
+  - Boolean algebra is an algebra dealing with binary variables and logic operations
+  - A Boolean function can be represented by a truth table; a truth table is a list of all combinations of 1s and 0s that can be assigned to the binary variables and a list that shows the value of the function for each binary combination
+  - By simplifying a Boolean function in algebraic equation form it is often possible to reduce the number of gates and inputs to the gates for the logic circuit implementation of the function 
+  - Basic Identities of Boolean Algebra
+    - Relationships between a single variable X, its complement, and the binary constants 0 and 1
+    - Commutative
+    - Associative
+    - Distributive
+    - DeMorgan's Theorem
+  - Algebraic Manipulation
+    - There are six theorems of Boolean algebra that assist in performing simplification
+    - The dual of an expression is obtained by changing AND to OR and OR to AND throughout (and 1s to 0s and 0s to 1s if they appear in the expression)
+    - The duality priniciple of Boolean algebra states that a Boolean equation remains valid if we take the dual of the expressions on both sides of the equals sign
+    - The consensus theorem and its dual are also useful for simplifying Boolean expressions
+  - Complement of a Function
+    - The complement of a function can be derived algebraically by applying DeMorgan's theorem or by taking the dual of the equation and then complementing each literal
+- 2-3 Standard Forms
+  - Minterms and Maxterms
+    - A minterm is a product term in which all the variables appear exactly once
+      - A literal is a complemented variable if the corresponding bit of the related binary combination is 0 and is an uncomplemented variable if it is 1
+    - A maxterm is a sum term that contains all the variables in complemented or uncomplemented form
+      - A literal is a complemented variable if the corresponding bit of the related binary combination is 1 and is an uncomplemented variable if it is 0
+    - A sum of minterms is an expression used to represent a boolean function algebraically from a given truth table by forming the logical sum of all the minterms that produce a 1 in the function
+    - Important Properties of Minterms
+      - There are 2^n minterms for n Boolean variables. These minterms can be generated from the binary numbers from 0 to 2^n - 1.
+      - Any Boolean function can be expressed as a logical sum of minterms.
+      - The complement of a function contains those minterms not included in the original function.
+      - A function that includes all the 2^n minterms is equal to logic 1.
+  - Sum of Products
+    - The sum-of-products standard form is a sum of minterms expression simplified to reduce the number of product terms and the number of literals in the terms
+    - results in a two-level implementation or two-level circuit (contains two levels or logic gates)
+  - Product of Sums
+    - The product of sums standard form is obtained by forming a logical product of sum terms; also results in a two-level gating structure
+- 2-4 Two-Level Circuit Optimization
+  - Karnaugh maps, or K-maps, provide a straightforward procedure for optimizing Boolean functions of up to four variables
+  - Cost Criteria
+    - Literal cost is the number of literal appearances in a Boolean expression
+    - Gate-input cost is the number of inputs to the gates in the implementation
+  - Map Structures
+    - The binary combinations across the top and down the left side of a K-map take the form of a Gray code
+    - Two product terms are adjacent if they differ in one and only one literal which appears uncomplemented in one and complemented in the other
+    - Two squares sharing edges that are minterms of a function can be combined to form a product term with one less variable
+  - Two-Variable Maps
+    - Steps for using a K-map:
+      - (1) Enter the function on the K-map
+      - (2) Identify collections of squares on the map representing product terms to be considered for the simplified expression
+      - (3) Determine if any of the rectangles we have generated is not needed to cover all of the 1s on the K-map
+      - (4) Read off the sum-of-products expression, determining the corresponding product terms for the required rectangles in the map
+  - Three-Variable Maps
+- 2-5 Map Manipulation
+  - Essential Prime Implicants
+    - A product term is an implicant of a function if the function has the value 1 for all minterms of the product term
+    - If the removal of any literal from an implicant P results in a product term that is not an implicant of the function, then P is a prime implicant
+    - If a minterm of a function is included in only one prime implicant, that prime implicant is said to be essential
+    - Systematic procedure for finding the optimized expression from the map:
+      - (1) Determine all prime implicants
+      - (2) The optimized expression is obtained from the logical sum of all the essential prime implicants, plus other prime implicants needed to include remaining minterms not included in the essential prime implicants
+  - Nonessential Prime Implicants
+    - Selection Rule: Minimize the overlap among prime implicants as much as possible; in particular, in the final solution, make sure that each prime implicant selected includes at least one minterm not included in any other prime implicant selected
+  - Product-of-Sums Optimization
+    - Procedure for obtaining an optimized expression:
+      - (1) Combine the 0s on the K-map into valid rectangles to obtain an optimized expression of the complement of F
+      - (2) Take the complement of this expression to obtain F as a product of sums; this is done by taking the dual and complementing each literal
+  - Don't-Care Conditions
+    - Functions that have unspecified outputs for some input combinations are called incompletely specified functions
+      - In the first case, the input combinations never occur
+      - In the second case, the input combinations are expected to occur, but we do not care what the outputs are in response to these combinations
+    - The unspecified minterms of a function are called don't care conditions
+- 2-6 Exclusive-Or Operator and Gates
+  - The exclusive-OR (XOR) logical operation is equal to 1 if exactly one input is equal to 1
+  - The exclusive-NOR (XNOR) is the complement of XOR and is equal to 1 if both X and Y are equal to 1 or if both are equal to 0
+  - XOR has a set of identities and is also both commutative and associative
+  - XOR and XNOR are only defined for two inputs, for more than two inputs use the odd and even functions
+  - Odd Function
+    - The multiple-variable exclusive-OR operation is defined as the odd function; with three or more variables an odd number of variables must be equal to 1
+    - The odd function is implemented by means of two-input exclusive-OR gates
+    - The even function is used for multiple-variable exclusive-NOR; it is the complement of the odd function and consists of the minterms with an even number of 1s
+    - The even function is implemented by means of two-input exclusive-NOR gates
+- 2-7 Gate Propagation Delay
+  - Propagation delay is the time required for a change in value of a signal to propagate from input to output
+  - For transport delay, the change in an output in response to the change in an input occurs after a specified propagation delay
+  - For inertial delay, if the input changes cause the output to change twice in an interval less than the rejection time, then the first of the two output changes does not occur
+- 2-8 HDLs Overview
+  - Designing complex systems and integrated circuits would not be feasible without the use of computer-aided design (CAD) tools such as schematic capture tools and hardware description languages (HDLs)
+  - HDLs support design verification and logic synthesis
+  - An HDL description of a system can be written at an intermediate level referred to as a register transfer language (RTL) level; a logic synthesis tool with an accompanying library of components can convert such a description into an interconnection of primitive components that implements the circuit
+  - Currently, VHDL and Verilog are the widely used HDLs with standards published by IEEE
+  - Procedure used in employing an HDL description as simulation input: Analysis —> Elaboration —> Initialization —> Simulation
+  - A testbench is an HDL structure that includes a description of the design to be tested, referred to as the Device Under Test (DUT) ; the testbench describes a collection of hardware and software functions that apply inputs to the DUT and analyze the outputs for correctness
+  - Logic Synthesis
+    - The logic synthesis tool takes care of a large portion of the details of a design and allows exploration of the cost/performance trade-offs essential to advanced designs
+    - High-Level Flow for Logic Synthesis Tool: 
+      - HDL Description of Circuit —> Translation —> Intermediate Representation —> Preoptimization —> Optimization —> Technology Mapping —> Netlist
+    - Electronic, Speed, and Area Constraints are also supplied with the HDL description of the circuit
+    - Additional information used by a synthesis tool is a technology library that describes the primite blocks available for us in the netlist as well as their physical parameters necessary for delay computations
+    - During optimization typically both two-level and multiple-level optimization are performed
+    - The step called technology mapping replaces AND gates, OR gates, and inverters with gates from the technology library
+    - The output of the process serves as input to physical design tools that physically place the logic elements and route the interconnections between them to produce the layout of the circuit for manufacture
+- 2-9 HDL Representation - VHDL
+  - An entity is the fundamental building block of a VHDL design
+  - VHDL names are case insensitive
+  - Structural Description
+    - Equivalent to the schematic for the circuit
+  - Dataflow Description
+    - Made up of concurrent assignment statements or their equivalent
+    - Can consist of Boolean equation-like statements
+    - Can also be described with a VHDL when-else statement
+  - Behavioral Description
+    - Describes a circuit in terms of function rather than structure
+  - When-else statement
+    - Permits decisions on multiple distinct signals; usually results in a more complex logical structure
+  - With-select statement
+    - Can depend on only a single Boolean condition (e.g., either the first signal or the second one, but not both)
+- 2-10 HDL Representations - Verilog
+  - A module is the fundamental building block of a Verilog design
+  - Verilog names are case sensitive
+  - The conditional operator is a Verilog feature that can be used to implement a circuit's function

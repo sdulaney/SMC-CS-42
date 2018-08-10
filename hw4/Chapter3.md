@@ -1,0 +1,113 @@
+CHAPTER 3 COMBINATIONAL LOGIC DESIGN
+
+- 3-1 Beginning Hierarchical Design
+  - For complex digital systems, a typical method for designing them is to use a divide and conquer method called hierarchical design
+  - The circuit is broken up into pieces called blocks, and the procedure for designing digital systems is used to design the blocks
+- 3-2 Technology Mapping
+  - Technology mapping transforms a logic diagram or netlist into a new diagram or netlist using available technology components
+  - This section discusses mapping AND, OR, NOT descriptions to NAND or NOR gate cells
+  - In currently available transistor technologies, NAND and NOR gates are smaller and faster than AND and OR gates
+- 3-3 Combinational Functional Blocks
+  - This chapter defines specific combinational functions and corresponding combinational circuits referred to as functional blocks
+  - Today, in very-large-scale integrated (VLSI) circuits, functional blocks are used to design circuits with many such blocks
+  - Large-scale and VLSI circuits are almost always sequential circuits
+  - Combinational functions and function blocks are often combined with storage elements to form sequential circuits
+- 3-4 Rudimentary Logic Functions
+  - Value-Fixing, Transferring, and Inverting
+    - Value fixing involves replacing one or more variables with constant values 1 and 0
+    - Transferring refers to transferring the value for a variable X from input to output
+    - Inverting refers to flipping the value of the input variable
+  - Multiple-Bit Functions
+    - Multiple-bit functions can be thought of as vectors of single-bit functions
+  - Enabling
+    - Enabling permits and input signal to pass through to an output; the additional input signal, often called ENABLE or EN, is required to determine whether the output is enabled or not
+    - Disabling EN also can replace the input signal with a fixed output value, either 0 or 1
+- 3-5 Decoding
+  - Decoding is the conversion of an n-bit input code to an m-bit output code such that each valid input code word produces a unique output code
+  - Decoding is performed by a decoder, a combinational circuit with an n-bit binary code applied to its inputs and an m-bit binary code appearing at the outputs
+  - Decoder and Enabling Combinations
+    - A 2-to-4 line decoder with enable has the same logic diagram as a 1-to-4 line demultiplexer
+  - Decoder-Based Combinational Circuits
+    - One can use a decoder to generate the minterms and combine them with an external OR gate to form a sum-of-minterms implementation
+    - The decoder method can be used to implement any combinational circuit
+- 3-6 Encoding
+  - An encoder is a digital function that performs the inverse operation of a decoder; an encoder has 2^n or fewer input lines and n output lines
+  - Priority Encoder
+    - A priority encoder is a combinational circuit that implements a priority funciton; if two or more inputs are equal to 1 at the same time, the input having the highest priority takes precedence
+    - A valid output bit designated by V is set to 1 only when one or more of the inputs are equal to 1
+  - Encoder Expansion
+    - Encoders can be expanded to larger numbers of inputs by expanding OR gates
+- 3-7 Selecting
+  - Multiplexers
+    - A multiplexer is a combinational circuit that selects binary information from one of many input lines and directs the information to a single output line
+    - The selection of a particular input line is controlled by a set of input variables called selection inputs
+    - A multiplexer is also called a data selector since it selects one of many information inputs and steers the binary information to the output line
+    - Multiplexer is often abbreviated as "MUX"
+  - Multiplexer-Based Combinational Circuits
+    - Value fixing applied to the I inputs provides a method for implementing a Boolean function of n variables with a multiplexer having n selection inputs and 2^n data inputs, one for each minterm
+    - An m-output function can be implemented by using value fixing on a multiplexer with m-bit information vectors instead of the individual I bits
+- 3-8 Iterative Combinational Circuits
+  - The arithmetic functional blocks are typically designed to operate on binary input vectors and produce binary output vectors
+  - The function implemented often requires that the same subfunction be applied to each bit position
+  - The subfunction blocks are referred to as cells and the overall implementation as an array of cells
+  - The overall functional block is referred to as an iterative array
+  - Iterative arrays are useful in handling circuits with many inputs; since they are based on repetitive cells, instead of beginning with truth tables and equations the design process is considerably simplified by a basic structure that guides the design
+- 3-9 Binary Adders
+  - Half Adder
+    - A half adder is an arithmetic circuit that generates the sum of two binary digits
+    - The half adder can be implemented with one exclusive-OR gate and one AND gate
+  - Full Adder
+    - A full adder is a combinational circuit that forms the arithmetic sum of three input bits
+    - The full adder can be implemented with two half adders and an OR gate
+  - Binary Ripple Carry Adder
+    - A binary ripple carry adder or parallel binary adder is a digital circuit that produces the arithmetic sum of two binary numbers using only combinational logic
+    - The parallel adder uses n full adders in parallel; the full adders are connected in cascade with the carry output from one full adder connected to the carry input of the next full adder
+- 3-10 Binary Subtraction
+  - Unsigned-number arithmetic is used in floating-point units, in signed-magnitude addition and subtraction algorithms, and in extending the precision of fixed-point numbers
+  - Procedure for subtracting two n-digit binary numbers:
+    - (1) Subtract the subtrahend from the minuend
+    - (2) If no end borrow occurs, the result is nonnegative and correct
+    - (3) If an end borrow occurs, take the 2s complement of the result and append a negative sign to obtain the correct result
+  - Subtraction of a binary number from 2^n to obtain an n-digit result is called taking the 2s complement of a number
+  - Complements
+    - Radix complement: referred to as r's complement
+    - Diminished radix complement: referred to as (r - 1)'s complement
+    - For binary numbers the two types of complements are referred to as the 1s and 2s complements
+    - 1s complement: obtained by subtracting each digit from 1 (flips/complements each bit)
+    - 2s complement: obtained by adding 1 to the 1s complement
+  - Subtraction Using 2s Complement
+    - Procedure for subtracting two n-digit binary unsigned numbers:
+      - (1) Add the 2s complement of the subtrahend to the minuend
+      - (2) If the sum produces an end carry, discard it
+      - (3) If the sum does not product an end carry, perform a correction. Take the 2s complement of the sum and place a minus sign in front to obtain the result
+- 3-11 Binary Adder-Subtractors
+  - Signed Binary Numbers
+    - Signed-magnitude representation: uses a sign bit 0 for positive numbers and 1 for negative numbers; the remaining n - 1 magnitude bits are processed as unsigned binary numbers
+    - Because the magnitude bits are processed as unsigned binary numbers, subtraction using this number system requires the correction step
+    - To avoid the correction step required for subtraction and the separate handling of the sign bit, we use a different system for representing negative numbers, a signed-complement system
+    - Signed-complement representation: a negative number is represented by its complement; 2s complement representation of negative numbers prevails in actual use; positive numbers always start with a 0, negative numbers always start with a 1
+  - Signed Binary Addition and Subtraction
+    - The addition of two signed binary numbers with negative numbers represented in signed 2s complement form is obtained from the addition of the two numbers, including their sign bits; a carry out of the sign bit position is discarded
+  - Overflow
+    - If we start with two n-bit numbers and the sum occupies n + 1 bits, we say that an overflow occurs
+    - An overflow condition can be detected by observing the carry into the sign bit position and the carry out of the sign bit position
+  - HDL Models of Adders
+    - VHDL and Verilog descriptions that represent circuits using hierarchies have multiple entities (VHDL) or modules (Verilog), one for each distinct element of the hierarchy
+  - Behavioral Description
+    - The 4-bit adder provides an opportunity to illustrate description of circuits at levels higher than the logic level, referred to as the behavioral level or the register transfer level
+- 3-12 Other Arithmetic Functions
+  - Contraction
+    - Contraction is a procedure in which value fixing, transferring, and inverting on inputs can be combined with function blocks to implement new functions
+    - The goal of contraction is to accomplish the design of a logic circuit or functional block by using results from past designs
+  - Incrementing
+    - An n-bit incrementer that performs the operation A + 1 can be obtained by using a binary adder that performs the operation A + B with B = 0…01
+  - Decrementing
+    - An n-bit decrementer that performs the operation A - 1 can be obtained by value fixing B = 1on a full adder
+  - Multiplication by Constants
+    - An important special case of multiplying by a constant occurs when the constant equals 2^i; the function of this block is called a left shift by i bit positions with zero fill
+  - Division by Constants
+    - Division by 2^i is also a very important operation; the function of this block is called a right shift by i bit positions
+  - Zero Fill and Extension
+    - Zero fill: the addition of 0s to the right of (or to the left of) an operand
+    - Zero fill can be used to increase the number of bits in an operand
+    - Sign extension: used to increase the number of bits in an operand represented by using a complement representation for signed numbers; bits can be added on the left by extending the sign of the number (0 for positive and 1 for negative)
